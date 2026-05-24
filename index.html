@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krzysztof Gdaniec — CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0b14;
+  --bg2: #11111e;
+  --purple: #6c4fff;
+  --purple-dim: rgba(108,79,255,0.15);
+  --cream: #e8e4d8;
+  --muted: #8b89a8;
+  --line: rgba(255,255,255,0.07);
+  --white: #f0eee8;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CURSOR TRAIL */
+#cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: var(--purple);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  mix-blend-mode: screen;
+  transition: width .15s, height .15s;
+}
+.trail-dot {
+  position: fixed;
+  border-radius: 50%;
+  background: var(--purple);
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%,-50%);
+}
+
+/* LOADER */
+#loader {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 500;
+  transition: opacity .5s ease;
+}
+.loader-inner {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(5rem, 18vw, 12rem);
+  color: var(--cream);
+  letter-spacing: -.02em;
+  opacity: 0;
+  animation: loaderAnim 2s ease forwards;
+}
+.loader-inner span { color: var(--purple); }
+@keyframes loaderAnim {
+  0%   { opacity:0; transform: translateY(40px) skewY(3deg); }
+  25%  { opacity:1; transform: translateY(0) skewY(0); }
+  75%  { opacity:1; transform: translateY(0); }
+  100% { opacity:0; transform: translateY(-30px); }
+}
+
+/* NAV */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.3rem clamp(2rem, 5vw, 5rem);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s, background .3s;
+}
+nav.scrolled {
+  background: rgba(11,11,20,.85);
+  backdrop-filter: blur(12px);
+  border-color: var(--line);
+}
+.nav-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800; font-size: 1.1rem;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--cream);
+}
+.nav-logo span { color: var(--purple); }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; transition: color .2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+  background: var(--purple); color: #fff;
+  padding: .45rem 1.1rem; border-radius: 2px;
+  text-decoration: none; transition: opacity .2s;
+}
+.nav-cta:hover { opacity: .85; }
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 7rem clamp(2rem, 5vw, 5rem) 4rem;
+  gap: clamp(2rem, 4vw, 6rem);
+  max-width: 1600px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+.hero-noise {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 90% at 65% 50%, rgba(108,79,255,.22) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 60% at 15% 75%, rgba(108,79,255,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 50% at 90% 20%, rgba(108,79,255,.09) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero-left { position: relative; z-index:1; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--purple); margin-bottom: 1.4rem;
+  opacity: 0; animation: fadeUp .7s ease .2s forwards;
+}
+.hero-tag::before {
+  content:''; width:6px; height:6px; border-radius:50%;
+  background: var(--purple); flex-shrink:0;
+}
+.hero-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(4rem, 7.5vw, 9rem);
+  line-height: .88;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  color: var(--cream);
+  opacity: 0; animation: fadeUp .8s ease .35s forwards;
+}
+.hero-title .accent { color: var(--purple); }
+.hero-title .italic {
+  font-style: italic; font-weight: 700;
+  color: var(--cream); opacity: .35;
+}
+.hero-desc {
+  margin-top: 2rem;
+  font-size: .92rem; color: var(--muted); line-height: 1.9;
+  max-width: 480px;
+  opacity: 0; animation: fadeUp .8s ease .5s forwards;
+}
+.hero-chips {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.8rem;
+  opacity: 0; animation: fadeUp .8s ease .65s forwards;
+}
+.chip {
+  font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .35rem .9rem; border-radius: 2px;
+  border: 1px solid rgba(108,79,255,.4);
+  color: rgba(108,79,255,.9);
+  background: var(--purple-dim);
+}
+.hero-right {
+  position: relative; z-index:1;
+  display: flex; justify-content: center; align-items: center;
+  opacity: 0; animation: fadeUp .9s ease .4s forwards;
+}
+.hero-card {
+  width: 100%; max-width: 400px;
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.hero-card-top {
+  background: linear-gradient(135deg, rgba(108,79,255,.3), rgba(108,79,255,.05));
+  padding: 2rem;
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 1.2rem;
+}
+.avatar-circle {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--purple);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900; font-size: 1.4rem;
+  color: #fff; flex-shrink: 0;
+}
+.card-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.2rem; letter-spacing: .04em; text-transform: uppercase; color: var(--cream); }
+.card-role { font-size: .72rem; color: var(--muted); margin-top: 2px; letter-spacing: .06em; }
+.hero-card-body { padding: 1.2rem 2rem; }
+.card-row { display:flex; align-items:center; gap:.7rem; padding:.55rem 0; border-bottom: 1px solid var(--line); font-size:.78rem; color: var(--muted); }
+.card-row:last-child { border:none; }
+.card-dot { width:5px; height:5px; border-radius:50%; background: var(--purple); flex-shrink:0; }
+.card-val { color: var(--white); margin-left: auto; font-size:.75rem; }
+.hero-scroll {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted); display:flex; align-items:center; gap:.5rem; z-index:1;
+  opacity: 0; animation: fadeUp .7s ease 1s forwards;
+}
+.arrow-bounce { animation: bounce 1.5s ease infinite; display: inline-block; }
+@keyframes bounce { 0%,100%{transform:translateY(0)}50%{transform:translateY(5px)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+/* BIG TEXT DIVIDER */
+.big-divider {
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: .8rem 0;
+  white-space: nowrap;
+}
+.big-divider-inner {
+  display: inline-flex; gap: 4rem;
+  animation: marquee 18s linear infinite;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 1.1rem;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.big-divider-inner span.hi { color: var(--purple); }
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* SECTION */
+.section {
+  padding: 6rem clamp(2rem, 5vw, 5rem);
+  border-bottom: 1px solid var(--line);
+  max-width: 1600px;
+  margin: 0 auto;
+  opacity: 0; transform: translateY(36px);
+  transition: opacity .75s ease, transform .75s ease;
+}
+.section.visible { opacity:1; transform:translateY(0); }
+.section-label {
+  display: flex; align-items:center; gap:1rem;
+  font-size: .62rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--purple); margin-bottom: 3rem;
+}
+.section-label::after { content:''; flex:1; height:1px; background:var(--line); }
+
+/* ABOUT */
+.about-grid { display:grid; grid-template-columns:1fr 1.3fr; gap:clamp(3rem,5vw,7rem); align-items:start; }
+.about-big {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800; font-size: clamp(2rem,3.5vw,4rem);
+  line-height: 1.05; text-transform: uppercase;
+  color: var(--cream); letter-spacing: -.01em;
+}
+.about-big .hl { color: var(--purple); }
+.about-text { font-size:.9rem; color:var(--muted); line-height:1.95; }
+.about-text p+p { margin-top:.9rem; }
+.about-text strong { color: var(--cream); font-weight: 500; }
+
+/* EXP */
+.exp-item {
+  display: grid; grid-template-columns: 50px 1fr auto;
+  gap: 1.8rem; padding: 2rem 0; border-top: 1px solid var(--line);
+  align-items: start;
+}
+.exp-item:last-child { border-bottom: 1px solid var(--line); }
+.exp-n {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: .85rem;
+  color: var(--purple); letter-spacing: .06em; padding-top:4px;
+}
+.exp-role {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800; font-size: clamp(1.3rem,2vw,1.8rem);
+  text-transform: uppercase; color: var(--cream);
+  letter-spacing: .02em; margin-bottom:.3rem;
+}
+.exp-co {
+  font-size: .68rem; letter-spacing:.12em; text-transform:uppercase;
+  color: var(--purple); margin-bottom:.7rem;
+}
+.exp-desc { font-size:.84rem; color:var(--muted); line-height:1.85; }
+.exp-desc li { list-style:none; padding:.2rem 0; }
+.exp-desc li::before { content:'→ '; color:var(--purple); }
+.exp-date {
+  font-size:.68rem; color:var(--muted); text-align:right;
+  white-space:nowrap; padding-top:4px; line-height:1.7;
+}
+
+/* SKILLS */
+.skills-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(3rem,5vw,6rem); }
+.skill-group-title {
+  font-size:.62rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:1.2rem;
+}
+.skill-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:.9rem 0; border-bottom:1px solid var(--line);
+  font-size:.87rem; color:var(--white);
+}
+.skill-row:first-of-type { border-top:1px solid var(--line); }
+.skill-lvl {
+  font-size:.65rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--purple); background:var(--purple-dim);
+  padding:2px 8px; border-radius:2px;
+}
+.tools-wrap { display:flex; flex-direction:column; }
+.tool-row {
+  padding:.9rem 0; border-bottom:1px solid var(--line);
+  font-size:.87rem; color:var(--muted);
+  display:flex; align-items:center; gap:.7rem;
+}
+.tool-row:first-of-type { border-top:1px solid var(--line); }
+.tool-row::before { content:''; width:4px; height:4px; border-radius:50%; background:var(--purple); flex-shrink:0; }
+
+/* EDU — dragon cards */
+.edu-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; position: relative; }
+.edu-card {
+  padding:2rem; border:1px solid var(--line); border-radius:4px;
+  background:var(--bg2); transition:border-color .25s;
+  position:relative; overflow:hidden;
+}
+.edu-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:var(--purple); opacity:0; transition:opacity .25s;
+}
+.edu-card:hover { border-color:rgba(108,79,255,.4); }
+.edu-card:hover::before { opacity:1; }
+.edu-yr { font-size:.62rem; color:var(--muted); letter-spacing:.14em; text-transform:uppercase; margin-bottom:.9rem; }
+.edu-school {
+  font-family:'Barlow Condensed',sans-serif; font-weight:800;
+  font-size:1.4rem; text-transform:uppercase; color:var(--cream);
+  letter-spacing:.02em; margin-bottom:.3rem;
+}
+.edu-deg {
+  font-size:.7rem; color:var(--purple); letter-spacing:.08em;
+  text-transform:uppercase; margin-bottom:.7rem;
+}
+.edu-note { font-size:.82rem; color:var(--muted); line-height:1.75; }
+
+/* EXP wrapper for dragon positioning */
+.exp-wrap { position: relative; }
+
+/* CRITTER — small creature in experience section */
+#exp-critter {
+  position: absolute;
+  left: -68px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .6s ease .1s;
+}
+#exp-critter.visible { opacity: 1; }
+#exp-critter svg {
+  width: 100%;
+  filter: drop-shadow(0 0 10px rgba(108,79,255,0.5));
+  animation: critterWiggle 3s ease-in-out infinite;
+}
+@keyframes critterWiggle {
+  0%,100% { transform: translateY(0) rotate(-4deg) scaleX(1); }
+  25%      { transform: translateY(-6px) rotate(3deg) scaleX(1.05); }
+  50%      { transform: translateY(-2px) rotate(-2deg) scaleX(0.97); }
+  75%      { transform: translateY(-8px) rotate(4deg) scaleX(1.03); }
+}
+
+/* DRAGON — right side of edu section */
+#dragon-float {
+  position: absolute;
+  right: -60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 80px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .6s ease, transform .6s ease;
+}
+#dragon-float.visible {
+  opacity: 1;
+  right: -45px;
+}
+#dragon-float svg {
+  width: 100%;
+  filter: drop-shadow(0 0 12px rgba(108,79,255,0.5));
+  animation: dragonFloat 4s ease-in-out infinite;
+}
+
+/* LEFT DRAGON CSS kept but unused now */
+#dragon-float-left { display: none; }
+
+@keyframes dragonFloat {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+/* CONTACT */
+.contact-layout { display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:2rem; }
+.contact-big {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size: clamp(3rem,6vw,7rem);
+  text-transform:uppercase; line-height:.9;
+  letter-spacing:-.01em; color:var(--cream);
+}
+.contact-big .hl { color:var(--purple); }
+.contact-details { display:flex; flex-direction:column; gap:.7rem; text-align:right; }
+.contact-details a {
+  font-size:.86rem; color:var(--muted); text-decoration:none;
+  transition:color .2s; letter-spacing:.04em;
+}
+.contact-details a:hover { color:var(--white); }
+.contact-avail {
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-size:.65rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--purple);
+}
+.contact-avail::before { content:''; width:6px; height:6px; border-radius:50%; background:#28c840; }
+
+/* CONTACT FACE */
+.contact-face {
+  width: 140px;
+  flex-shrink: 0;
+  opacity: 0.55;
+  filter: drop-shadow(0 0 18px rgba(108,79,255,0.6));
+  animation: faceFloat 5s ease-in-out infinite;
+  align-self: center;
+}
+.contact-face:hover {
+  opacity: 0.85;
+  filter: drop-shadow(0 0 28px rgba(108,79,255,0.9));
+}
+@keyframes faceFloat {
+  0%,100% { transform: rotate(-2deg) translateY(0); }
+  50%      { transform: rotate(2deg) translateY(-8px); }
+}
+.footer { padding:1.5rem clamp(2rem,5vw,5rem); display:flex; justify-content:space-between; align-items:center; max-width:1600px; margin:0 auto; }
+.footer-l,.footer-r { font-size:.62rem; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; }
+
+/* HOBBIES */
+.hobbies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.5rem;
+}
+.hobby-card {
+  padding: 1.8rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg2);
+  transition: border-color .25s, transform .25s;
+  position: relative; overflow: hidden;
+}
+.hobby-card:hover {
+  border-color: rgba(108,79,255,.4);
+  transform: translateY(-3px);
+}
+.hobby-card::before {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background: var(--purple); transform: scaleX(0); transform-origin: left;
+  transition: transform .3s ease;
+}
+.hobby-card:hover::before { transform: scaleX(1); }
+.hobby-icon { font-size: 1.5rem; margin-bottom: .8rem; display: block; }
+.hobby-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800; font-size: 1.05rem;
+  text-transform: uppercase; color: var(--cream);
+  letter-spacing: .04em; margin-bottom: .4rem;
+}
+.hobby-desc { font-size: .78rem; color: var(--muted); line-height: 1.7; }
+
+/* MOBILE */
+@media(max-width:680px){
+  .hero-grid { grid-template-columns:1fr; padding:6rem 1.5rem 3rem; gap:2rem; }
+  .hero-right,.nav-links { display:none; }
+  .section { padding:4rem 1.5rem; }
+  .about-grid,.skills-grid,.edu-grid { grid-template-columns:1fr; gap:2.5rem; }
+  .exp-item { grid-template-columns:32px 1fr; }
+  .exp-date { display:none; }
+  .contact-layout { flex-direction:column; align-items:flex-start; }
+  .contact-details { text-align:left; }
+  .footer { padding:1.2rem 1.5rem; flex-direction:column; gap:.5rem; text-align:center; }
+  #dragon-float, #dragon-float-left { display:none; }
+}
+
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--purple); border-radius:2px; }
+
+/* TETRIS CANVAS */
+#tetris-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+}
+
+/* Avatar circle pulse */
+.avatar-circle {
+  box-shadow: 0 0 0 0 rgba(108,79,255,0.5);
+  animation: avatarPulse 3s ease-in-out infinite;
+}
+@keyframes avatarPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(108,79,255,0.5); }
+  50%       { box-shadow: 0 0 0 8px rgba(108,79,255,0); }
+}
+</style>
+</head>
+
+<canvas id="tetris-bg"></canvas>
+<div id="cursor"></div>
+
+<div id="loader">
+  <div class="loader-inner">K<span>.</span>G</div>
+</div>
+
+<nav id="nav">
+  <div class="nav-logo">K<span>.</span>Gdaniec</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#skills">Skills</a>
+    <a href="#education">Education</a>
+    <a href="#hobbies">Hobbies</a>
+  </div>
+  <a href="mailto:gdanieckrzys@gmail.com" class="nav-cta">Contact ↗</a>
+</nav>
+
+<section id="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-grid">
+  <div class="hero-left">
+    <div class="hero-tag">Available · Gdańsk · Open to Work</div>
+    <h1 class="hero-title">
+      Krzysz<span class="accent">tof</span><br>
+      Gdaniec<br>
+      <span class="italic">— 2026</span>
+    </h1>
+    <p class="hero-desc">
+      Management student with a strong IT foundation. Passionate about emerging technologies, automation, and continuous learning. Bridging the gap between technical understanding and effective project execution. Seeking an opportunity to bring proactive problem-solving to a dynamic tech environment.
+    </p>
+    <div class="hero-chips">
+      <span class="chip">AI & Automation</span>
+      <span class="chip">IT Hardware</span>
+      <span class="chip">Project Mgmt</span>
+      <span class="chip">Game Dev</span>
+      <span class="chip">English B2</span>
+      <span class="chip">3D Printing</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-card">
+      <div class="hero-card-top">
+        <div class="avatar-circle">KG</div>
+        <div>
+          <div class="card-name">Krzysztof Gdaniec</div>
+          <div class="card-role">Management · UG · 2nd year</div>
+        </div>
+      </div>
+      <div class="hero-card-body">
+        <div class="card-row"><span class="card-dot"></span>Email<span class="card-val">gdanieckrzys@gmail.com</span></div>
+        <div class="card-row"><span class="card-dot"></span>Phone<span class="card-val">668 523 235</span></div>
+        <div class="card-row"><span class="card-dot"></span>Location<span class="card-val">Gdańsk, PL</span></div>
+        <div class="card-row"><span class="card-dot"></span>Status<span class="card-val" style="color:#28c840">Open to work ✓</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll"><span class="arrow-bounce">↓</span> Scroll</div>
+  </div>
+</section>
+
+<div class="big-divider">
+  <div class="big-divider-inner">
+    <span>Management</span><span class="hi">·</span>
+    <span>IT & Hardware</span><span class="hi">·</span>
+    <span>AI Tools</span><span class="hi">·</span>
+    <span>Game Dev</span><span class="hi">·</span>
+    <span>English B2</span><span class="hi">·</span>
+    <span>Project Management</span><span class="hi">·</span>
+    <span>Management</span><span class="hi">·</span>
+    <span>IT & Hardware</span><span class="hi">·</span>
+    <span>AI Tools</span><span class="hi">·</span>
+    <span>Game Dev</span><span class="hi">·</span>
+    <span>English B2</span><span class="hi">·</span>
+    <span>Project Management</span><span class="hi">·</span>
+  </div>
+</div>
+
+<section class="section" id="about">
+  <div class="section-label">About</div>
+  <div class="about-grid">
+    <div class="about-big">
+      Business mind.<br><span class="hl">Tech</span><br>background.
+    </div>
+    <div class="about-text">
+      <p>I'm a 2nd-year Management student at the University of Gdańsk, and before that I spent five years grinding through an IT technical school. So I can talk to developers and I can talk to clients — which turns out to be a useful combination.</p>
+      <p>I like figuring out how things work and finding better ways to do them. That's pulled me toward a lot of tools — <strong>AI being one I've spent a fair amount of time with</strong>. I think <strong>prompt engineering is a real skill</strong>, not a party trick, and I treat it like one.</p>
+      <p><strong>Self-development is something I take seriously</strong>, not something I say in interviews. I <strong>track what I learn</strong>, I <strong>experiment constantly</strong>, and I actively look for feedback. I've had some hands-on experience <strong>running small projects</strong> — coordinating people, timelines, and all the messiness in between.</p>
+      <p>I'm <strong>fast, adaptable</strong>, and I don't need a lot of hand-holding. I want to be somewhere I can <strong>learn a lot and contribute something real</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="experience">
+  <div class="section-label">Experience</div>
+  <div class="exp-wrap" id="exp-wrap">
+
+  <!-- CRITTER — little creature beside experience -->
+  <div id="exp-critter">
+    <svg viewBox="0 0 56 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- body — rounded pill -->
+      <ellipse cx="28" cy="68" rx="14" ry="28" stroke="rgba(108,79,255,0.8)" stroke-width="2.5" fill="rgba(108,79,255,0.06)"/>
+      <!-- head -->
+      <circle cx="28" cy="32" r="13" stroke="rgba(108,79,255,0.85)" stroke-width="2.5" fill="rgba(108,79,255,0.08)"/>
+      <!-- eyes — two small dots -->
+      <circle cx="23" cy="29" r="3" fill="rgba(108,79,255,0.9)"/>
+      <circle cx="33" cy="29" r="3" fill="rgba(108,79,255,0.9)"/>
+      <!-- pupil shine -->
+      <circle cx="24" cy="28" r="1" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="34" cy="28" r="1" fill="rgba(255,255,255,0.7)"/>
+      <!-- small smile -->
+      <path d="M23 36 Q28 41 33 36" stroke="rgba(108,79,255,0.7)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <!-- little ears/horns -->
+      <path d="M18 23 L14 14 L21 20" stroke="rgba(108,79,255,0.6)" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+      <path d="M38 23 L42 14 L35 20" stroke="rgba(108,79,255,0.6)" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+      <!-- arm stubs -->
+      <path d="M14 58 Q6 52 4 58 Q6 64 14 62" stroke="rgba(108,79,255,0.55)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <path d="M42 58 Q50 52 52 58 Q50 64 42 62" stroke="rgba(108,79,255,0.55)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <!-- legs -->
+      <path d="M22 94 Q18 106 14 110" stroke="rgba(108,79,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M34 94 Q38 106 42 110" stroke="rgba(108,79,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+      <!-- belly pattern — 3 dots -->
+      <circle cx="28" cy="60" r="2" fill="rgba(108,79,255,0.3)"/>
+      <circle cx="28" cy="70" r="2" fill="rgba(108,79,255,0.25)"/>
+      <circle cx="28" cy="80" r="2" fill="rgba(108,79,255,0.2)"/>
+    </svg>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-n">01</div>
+    <div>
+      <div class="exp-role">NDT Documentation & Coordination Assistant</div>
+      <div class="exp-co">Navitest Sp. z o.o.</div>
+      <ul class="exp-desc">
+        <li>Managed and archived technical documentation from NDT weld inspections</li>
+        <li>Direct contact with clients on technical and logistical matters</li>
+        <li>Organized team workflows during field projects using Trello</li>
+        <li>Supported field teams on-site during inspection rounds</li>
+      </ul>
+    </div>
+    <div class="exp-date">Jun 2023 — Aug 2023<br>Jun 2024 — Sep 2024</div>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-n">02</div>
+    <div>
+      <div class="exp-role">Sales & Shelf Replenishment</div>
+      <div class="exp-co">Kaufland Polska</div>
+      <ul class="exp-desc">
+        <li>Received and verified incoming deliveries against manifests</li>
+        <li>Restocked shelves and kept product availability consistent throughout the day</li>
+        <li>Customer-facing work on the shop floor</li>
+      </ul>
+    </div>
+    <div class="exp-date">Sep 2025 —<br>Feb 2026</div>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-n">03</div>
+    <div>
+      <div class="exp-role">IT Hardware Intern</div>
+      <div class="exp-co">Computer Hardware Shop — School Practicum</div>
+      <ul class="exp-desc">
+        <li>Assembled, configured, and diagnosed PC hardware</li>
+        <li>Technical support and customer service</li>
+      </ul>
+    </div>
+    <div class="exp-date">2022 — 2023</div>
+  </div>
+
+  </div><!-- end exp-wrap -->
+</section>
+
+<section class="section" id="skills">
+  <div class="section-label">Skills</div>
+  <div class="skills-grid">
+    <div>
+      <div class="skill-group-title">Competencies</div>
+      <div class="skill-row">English <span class="skill-lvl">B2</span></div>
+      <div class="skill-row">IT & Hardware Fundamentals <span class="skill-lvl">Strong</span></div>
+      <div class="skill-row">Project Management <span class="skill-lvl">Hands-on</span></div>
+      <div class="skill-row">Client Communication <span class="skill-lvl">Strong</span></div>
+      <div class="skill-row">Adaptability & Fast Learning <span class="skill-lvl">Proven</span></div>
+    </div>
+    <div>
+      <div class="skill-group-title">Tools & Platforms</div>
+      <div class="tools-wrap">
+        <div class="tool-row">AI Tools — ChatGPT, Claude, Gemini</div>
+        <div class="tool-row">MS Office & Google Workspace</div>
+        <div class="tool-row">Trello & Project Workflows</div>
+        <div class="tool-row">Basic HTML / JavaScript (high school)</div>
+        <div class="tool-row">3D Printing (Certified Operator)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="education">
+  <div class="section-label">Education</div>
+  <div class="edu-grid" id="edu-grid">
+    <div class="edu-card">
+      <div class="edu-yr">2024 — 2027 · Ongoing</div>
+      <div class="edu-school">University of Gdańsk</div>
+      <div class="edu-deg">BSc Management</div>
+      <div class="edu-note">2nd year. Organizational strategy, finance, project management. Participated in the "Strateg" Science Club — including running cybersecurity workshops for seniors focused on deepfakes and online scams.</div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-yr">2019 — 2024</div>
+      <div class="edu-school">Technikum nr 13, Gdańsk</div>
+      <div class="edu-deg">IT Technician Diploma</div>
+      <div class="edu-note">Hardware architecture, networking, operating systems, basic programming. Five years of thinking technically before pivoting to management.</div>
+    </div>
+
+    <!-- dragons removed, now in experience section -->
+    <!-- DRAGON — original right side position -->
+    <div id="dragon-float">
+      <svg viewBox="0 0 80 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M40 8 C65 50 18 100 55 150 C78 185 20 220 45 255"
+          stroke="rgba(108,79,255,0.7)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <g stroke="rgba(108,79,255,0.4)" stroke-width="1.2">
+          <line x1="55" y1="60" x2="68" y2="50"/>
+          <line x1="26" y1="110" x2="13" y2="100"/>
+          <line x1="62" y1="165" x2="75" y2="155"/>
+          <line x1="24" y1="215" x2="11" y2="205"/>
+        </g>
+        <circle cx="40" cy="8" r="7" stroke="rgba(108,79,255,0.9)" stroke-width="1.5" fill="none"/>
+        <circle cx="40" cy="8" r="2.5" fill="rgba(108,79,255,0.9)"/>
+        <circle cx="35" cy="5" r="1.5" fill="var(--white)" opacity=".8"/>
+        <circle cx="45" cy="5" r="1.5" fill="var(--white)" opacity=".8"/>
+        <path d="M33 7 C22 3 14 8 5 5" stroke="rgba(108,79,255,0.5)" stroke-width="1" fill="none"/>
+        <path d="M47 7 C58 3 66 8 75 5" stroke="rgba(108,79,255,0.5)" stroke-width="1" fill="none"/>
+        <path d="M45 255 C42 268 50 272 46 282" stroke="rgba(108,79,255,0.4)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="hobbies">
+  <div class="section-label">Hobbies</div>
+  <div class="hobbies-grid">
+    <div class="hobby-card">
+      <span class="hobby-icon">🎮</span>
+      <div class="hobby-name">Gaming & Game Dev</div>
+      <div class="hobby-desc">I play a lot and I like understanding why games feel the way they do — what decisions went into making something fun or frustrating. That curiosity pushed me toward trying to build things myself, which is a whole different kind of challenge.</div>
+    </div>
+    <div class="hobby-card">
+      <span class="hobby-icon">🤖</span>
+      <div class="hobby-name">AI & Automation</div>
+      <div class="hobby-desc">I spend a lot of time testing what AI tools can actually do, not just what they're marketed as. Building small automations, finding where they break, figuring out what's worth using. It's become a genuine skill I keep developing.</div>
+    </div>
+    <div class="hobby-card">
+      <span class="hobby-icon">💪</span>
+      <div class="hobby-name">Gym</div>
+      <div class="hobby-desc">Been training for about a year and a half. Still relatively new to it but consistent. It's one of those things where the feedback is immediate and honest — either you showed up or you didn't.</div>
+    </div>
+    <div class="hobby-card">
+      <span class="hobby-icon">📈</span>
+      <div class="hobby-name">Capital Markets</div>
+      <div class="hobby-desc">I invest and actively try to understand what I'm doing and why. Less about picking stocks, more about understanding how markets work, how people behave under different conditions, and what actually drives prices. Still learning but taking it seriously.</div>
+    </div>
+    <div class="hobby-card">
+      <span class="hobby-icon">📖</span>
+      <div class="hobby-name">Reading</div>
+      <div class="hobby-desc">Mostly philosophy and fiction. I like reading things that make me think differently about how people make decisions or deal with uncertainty. Also a big fan of deep fictional universes — the kind where someone clearly spent years building the world.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="section-label">Contact</div>
+  <div class="contact-layout">
+    <div class="contact-big">
+      Hit me<br>up<span class="hl">.</span>
+    </div>
+    <!-- Wrzuć swój obrazek jako "jinxsmile.png" w tym samym folderze co plik HTML -->
+    <img src="jinxsmile.png" alt="" class="contact-face" onerror="this.style.display='none'"/>
+    <div class="contact-details">
+      <a href="mailto:gdanieckrzys@gmail.com">gdanieckrzys@gmail.com</a>
+      <a href="tel:668523235">668 523 235</a>
+      <a>Gdańsk, Poland</a>
+      <span class="contact-avail">Open to Full-Time Roles</span>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <span class="footer-l">Krzysztof Gdaniec · 2026</span>
+  <span class="footer-r">Gdańsk · Poland</span>
+</div>
+
+<script>
+// LOADER
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const l = document.getElementById('loader');
+    if(l) { l.style.opacity='0'; setTimeout(()=>l.style.display='none',550); }
+  }, 2200);
+});
+
+// NAV
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+}, { passive:true });
+
+// SECTION REVEAL
+const obs = new IntersectionObserver(
+  entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold:0.07 }
+);
+document.querySelectorAll('.section').forEach(s => obs.observe(s));
+
+// CRITTER — experience section
+const critterObs = new IntersectionObserver(
+  entries => entries.forEach(e => {
+    const c = document.getElementById('exp-critter');
+    if(c) c.classList.toggle('visible', e.isIntersecting);
+  }),
+  { threshold: 0.2 }
+);
+const expWrap = document.getElementById('exp-wrap');
+if(expWrap) critterObs.observe(expWrap);
+
+// DRAGON — education section
+const dragonObs = new IntersectionObserver(
+  entries => entries.forEach(e => {
+    const d = document.getElementById('dragon-float');
+    if(d) d.classList.toggle('visible', e.isIntersecting);
+  }),
+  { threshold: 0.3 }
+);
+const eduGrid = document.getElementById('edu-grid');
+if(eduGrid) dragonObs.observe(eduGrid);
+
+// TETRIS BLOCKS BACKGROUND
+(function(){
+  const canvas = document.getElementById('tetris-bg');
+  const ctx = canvas.getContext('2d');
+  let W, H, mouse = {x:-999, y:-999};
+
+  // Tetromino shapes as arrays of [col, row] offsets
+  const SHAPES = [
+    [[0,0],[1,0],[2,0],[3,0]],   // I
+    [[0,0],[0,1],[1,1],[2,1]],   // J
+    [[2,0],[0,1],[1,1],[2,1]],   // L
+    [[0,0],[1,0],[1,1],[2,1]],   // S
+    [[1,0],[2,0],[0,1],[1,1]],   // Z
+    [[0,0],[1,0],[0,1],[1,1]],   // O
+    [[1,0],[0,1],[1,1],[2,1]],   // T
+  ];
+
+  const COLORS = [
+    'rgba(108,79,255,',   // purple
+    'rgba(108,79,255,',
+    'rgba(150,120,255,',  // lighter purple
+    'rgba(80,55,200,',    // deeper
+  ];
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize, {passive:true});
+
+  const SZ = 22; // cell size in px
+  const COUNT = 11;
+
+  class Block {
+    constructor(){
+      this.reset(true);
+    }
+    reset(initial){
+      this.shape = SHAPES[Math.floor(Math.random()*SHAPES.length)];
+      this.color = COLORS[Math.floor(Math.random()*COLORS.length)];
+      this.alpha = 0.04 + Math.random()*0.05;
+      this.x = Math.random()*W;
+      this.y = initial ? Math.random()*H : -80;
+      this.vx = (Math.random()-0.5)*0.12;
+      this.vy = 0.06 + Math.random()*0.09;
+      this.rot = Math.floor(Math.random()*4); // 0-3 rotations
+      this.scale = 0.8 + Math.random()*0.8;
+    }
+    getRotated(){
+      // rotate shape by 90deg increments
+      let cells = this.shape;
+      for(let r=0;r<this.rot;r++){
+        cells = cells.map(([c,row])=>[-row,c]);
+      }
+      return cells;
+    }
+    update(){
+      // mouse repulsion
+      const cells = this.getRotated();
+      // center of piece
+      const cx = this.x + (cells.reduce((a,c)=>a+c[0],0)/cells.length)*SZ*this.scale;
+      const cy = this.y + (cells.reduce((a,c)=>a+c[1],0)/cells.length)*SZ*this.scale;
+      const dx = cx - mouse.x;
+      const dy = cy - mouse.y;
+      const dist = Math.sqrt(dx*dx+dy*dy);
+      const REPEL = 90;
+      if(dist < REPEL && dist > 0){
+        const force = (REPEL-dist)/REPEL * 1.8;
+        this.vx += (dx/dist)*force*0.06;
+        this.vy += (dy/dist)*force*0.06;
+      }
+      // dampen
+      this.vx *= 0.97;
+      this.vy = this.vy*0.97 + 0.02; // always drift down gently
+      this.x += this.vx;
+      this.y += this.vy;
+      // wrap x
+      if(this.x > W+80) this.x = -80;
+      if(this.x < -80) this.x = W+80;
+      // reset when off bottom
+      if(this.y > H+100) this.reset(false);
+    }
+    draw(){
+      const cells = this.getRotated();
+      ctx.fillStyle = this.color + this.alpha + ')';
+      ctx.strokeStyle = this.color + (this.alpha*1.5) + ')';
+      ctx.lineWidth = 0.8;
+      cells.forEach(([c,r])=>{
+        const px = this.x + c*SZ*this.scale;
+        const py = this.y + r*SZ*this.scale;
+        const sz = SZ*this.scale - 1;
+        ctx.fillRect(px, py, sz, sz);
+        ctx.strokeRect(px, py, sz, sz);
+      });
+    }
+  }
+
+  const blocks = Array.from({length:COUNT}, ()=>new Block());
+
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    blocks.forEach(b=>{ b.update(); b.draw(); });
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  document.addEventListener('mousemove', e=>{
+    mouse.x = e.clientX; mouse.y = e.clientY;
+  },{passive:true});
+  document.addEventListener('mouseleave', ()=>{ mouse.x=-999; mouse.y=-999; });
+})();
+
+const TRAIL = 10;
+let mx = 0, my = 0;
+const dots = [];
+const positions = Array(TRAIL).fill({x:0,y:0});
+
+for(let i=0;i<TRAIL;i++){
+  const d = document.createElement('div');
+  d.className = 'trail-dot';
+  const size = 8 - i*0.6;
+  d.style.cssText = `width:${size}px;height:${size}px;opacity:${(1-i/TRAIL)*0.35};`;
+  document.body.appendChild(d);
+  dots.push(d);
+}
+
+document.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+},{passive:true});
+
+(function animate(){
+  positions.unshift({x:mx,y:my});
+  positions.length=TRAIL;
+  dots.forEach((d,i)=>{
+    d.style.left=positions[i].x+'px';
+    d.style.top=positions[i].y+'px';
+  });
+  requestAnimationFrame(animate);
+})();
+</script>
+</html>
