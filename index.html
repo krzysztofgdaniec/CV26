@@ -18,7 +18,7 @@
   --white: #f0eee8;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; font-size: 110%; }
 body {
   background: var(--bg);
   color: var(--white);
@@ -174,6 +174,14 @@ nav.scrolled {
   border: 1px solid rgba(108,79,255,.4);
   color: rgba(108,79,255,.9);
   background: var(--purple-dim);
+  transition: box-shadow .15s ease, border-color .15s, color .15s;
+  will-change: transform;
+  display: inline-block;
+}
+.chip:hover {
+  border-color: rgba(108,79,255,.85);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(108,79,255,.35), 0 2px 8px rgba(0,0,0,.4);
 }
 .hero-right {
   position: relative; z-index:1;
@@ -497,6 +505,25 @@ nav.scrolled {
 ::-webkit-scrollbar-track { background:var(--bg); }
 ::-webkit-scrollbar-thumb { background:var(--purple); border-radius:2px; }
 
+/* Kill click-focus caret, keep keyboard outline */
+*:focus { outline: none; }
+*:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+
+/* Tilt card */
+.hero-card { will-change: transform; }
+.hero-card:hover { box-shadow: 0 24px 60px rgba(108,79,255,0.18); }
+
+/* Typewriter cursor */
+#tw-cursor {
+  display: inline-block;
+  width: 2px; height: 1em;
+  background: var(--purple);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: twBlink .75s step-end infinite;
+}
+@keyframes twBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
 /* TETRIS CANVAS */
 #tetris-bg {
   position: fixed;
@@ -515,6 +542,132 @@ nav.scrolled {
   0%, 100% { box-shadow: 0 0 0 0 rgba(108,79,255,0.5); }
   50%       { box-shadow: 0 0 0 8px rgba(108,79,255,0); }
 }
+
+/* SCROLL SPY — active nav link */
+.nav-links a.active {
+  color: var(--white);
+  position: relative;
+}
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0; right: 0;
+  height: 1px;
+  background: var(--purple);
+  border-radius: 1px;
+}
+
+/* BACK TO TOP — fixed, centered horizontally */
+#back-top-wrap {
+  position: fixed;
+  bottom: 2.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s;
+  z-index: 200;
+}
+#back-top-wrap.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+#back-top-label {
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+#back-top {
+  width: 36px; height: 36px;
+  background: rgba(17,17,30,0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted);
+  font-size: .85rem;
+  cursor: pointer;
+  transition: border-color .2s, color .2s, transform .2s;
+}
+#back-top:hover {
+  border-color: rgba(108,79,255,.5);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+/* RASPBERRY — footer, page-palette ghost */
+#raspberry {
+  position: fixed;
+  bottom: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%) translateX(120px);
+  width: 26px; height: 26px;
+  cursor: grab;
+  z-index: 300;
+  user-select: none;
+  opacity: 0.22;
+  filter: drop-shadow(0 0 4px rgba(108,79,255,0.25));
+  transition: opacity .3s, filter .3s;
+}
+#raspberry:hover {
+  opacity: 0.65;
+  filter: drop-shadow(0 0 8px rgba(108,79,255,0.5));
+}
+#raspberry.dragging {
+  cursor: grabbing;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 12px rgba(108,79,255,0.7));
+  transition: none;
+}
+#raspberry.fed {
+  animation: raspFed .4s ease forwards;
+}
+@keyframes raspFed {
+  0%   { transform: translateX(-50%) translateX(120px) scale(1); opacity:.9; }
+  50%  { transform: translateX(-50%) translateX(120px) scale(1.5); opacity:1; }
+  100% { transform: translateX(-50%) translateX(120px) scale(0);   opacity:0; }
+}
+#dragon-float.spin svg {
+  animation: dragonSpin .65s cubic-bezier(.36,.07,.19,.97) forwards !important;
+}
+@keyframes dragonSpin {
+  0%   { transform: rotate(0deg)   scale(1); }
+  30%  { transform: rotate(-20deg) scale(1.15); }
+  70%  { transform: rotate(360deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* EASTER EGG — click counter on name */
+#footer-name {
+  cursor: default;
+  transition: color .2s;
+}
+#footer-name:hover { color: var(--white); }
+#egg-popup {
+  position: fixed;
+  bottom: 3.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(17,17,30,0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(108,79,255,.35);
+  border-radius: 4px;
+  padding: .55rem 1.1rem;
+  font-size: .72rem;
+  color: var(--cream);
+  letter-spacing: .04em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .25s;
+  z-index: 400;
+}
+#egg-popup.show { opacity: 1; }
 </style>
 </head>
 
@@ -545,17 +698,16 @@ nav.scrolled {
     <h1 class="hero-title">
       Krzysz<span class="accent">tof</span><br>
       Gdaniec<br>
-      <span class="italic">- 2026</span>
+      <span class="italic">— 2026</span>
     </h1>
-    <p class="hero-desc">
-      Management student with a strong IT foundation. Passionate about emerging technologies, automation, and continuous learning. Bridging the gap between technical understanding and effective project execution. Seeking an opportunity to bring proactive problem-solving to a dynamic tech environment.
-    </p>
+    <p class="hero-desc" id="hero-desc-tw"></p>
     <div class="hero-chips">
       <span class="chip">AI & Automation</span>
       <span class="chip">IT Hardware</span>
       <span class="chip">Project Mgmt</span>
       <span class="chip">Game Dev</span>
       <span class="chip">English B2</span>
+      <span class="chip">3D Printing</span>
     </div>
   </div>
   <div class="hero-right">
@@ -603,9 +755,9 @@ nav.scrolled {
       Business mind.<br><span class="hl">Tech</span><br>background.
     </div>
     <div class="about-text">
-      <p>I'm a 2nd-year Management student at the University of Gdańsk, and before that I spent five years grinding through an IT technical school. So I can talk to developers and I can talk to clients - which turns out to be a useful combination.</p>
-      <p>I like figuring out how things work and finding better ways to do them. That's pulled me toward a lot of tools - <strong>AI being one I've spent a fair amount of time with</strong>. I think <strong>prompt engineering is a real skill</strong>, not a party trick, and I treat it like one.</p>
-      <p><strong>Self-development is something I take seriously</strong>, not something I say in interviews. I <strong>track what I learn</strong>, I <strong>experiment constantly</strong>, and I actively look for feedback. I've had some hands-on experience <strong>running small projects</strong> - coordinating people, timelines, and all the messiness in between.</p>
+      <p>I'm a 2nd-year Management student at the University of Gdańsk, and before that I spent five years grinding through an IT technical school. So I can talk to developers and I can talk to clients — which turns out to be a useful combination.</p>
+      <p>I like figuring out how things work and finding better ways to do them. That's pulled me toward a lot of tools — <strong>AI being one I've spent a fair amount of time with</strong>. I think <strong>prompt engineering is a real skill</strong>, not a party trick, and I treat it like one.</p>
+      <p><strong>Self-development is something I take seriously</strong>, not something I say in interviews. I <strong>track what I learn</strong>, I <strong>experiment constantly</strong>, and I actively look for feedback. I've had some hands-on experience <strong>running small projects</strong> — coordinating people, timelines, and all the messiness in between.</p>
       <p>I'm <strong>fast, adaptable</strong>, and I don't need a lot of hand-holding. I want to be somewhere I can <strong>learn a lot and contribute something real</strong>.</p>
     </div>
   </div>
@@ -658,7 +810,7 @@ nav.scrolled {
         <li>Supported field teams on-site during inspection rounds</li>
       </ul>
     </div>
-    <div class="exp-date">Jun 2023 - Aug 2023<br>Jun 2024 - Sep 2024</div>
+    <div class="exp-date">Jun 2023 — Aug 2023<br>Jun 2024 — Sep 2024</div>
   </div>
 
   <div class="exp-item">
@@ -672,20 +824,20 @@ nav.scrolled {
         <li>Customer-facing work on the shop floor</li>
       </ul>
     </div>
-    <div class="exp-date">Sep 2025 -<br>Feb 2026</div>
+    <div class="exp-date">Sep 2025 —<br>Feb 2026</div>
   </div>
 
   <div class="exp-item">
     <div class="exp-n">03</div>
     <div>
       <div class="exp-role">IT Hardware Intern</div>
-      <div class="exp-co">Computer Hardware Shop - School Practicum</div>
+      <div class="exp-co">Computer Hardware Shop — School Practicum</div>
       <ul class="exp-desc">
         <li>Assembled, configured, and diagnosed PC hardware</li>
         <li>Technical support and customer service</li>
       </ul>
     </div>
-    <div class="exp-date">2022 - 2023</div>
+    <div class="exp-date">2022 — 2023</div>
   </div>
 
   </div><!-- end exp-wrap -->
@@ -700,16 +852,16 @@ nav.scrolled {
       <div class="skill-row">IT & Hardware Fundamentals <span class="skill-lvl">Strong</span></div>
       <div class="skill-row">Project Management <span class="skill-lvl">Hands-on</span></div>
       <div class="skill-row">Client Communication <span class="skill-lvl">Strong</span></div>
-      <div class="skill-row">Adaptability & Fast Learning <span class="skill-lvl">Hands-on</span></div>
+      <div class="skill-row">Adaptability & Fast Learning <span class="skill-lvl">Proven</span></div>
     </div>
     <div>
       <div class="skill-group-title">Tools & Platforms</div>
       <div class="tools-wrap">
-        <div class="tool-row">AI Tools - ChatGPT, Claude, Gemini</div>
+        <div class="tool-row">AI Tools — ChatGPT, Claude, Gemini</div>
         <div class="tool-row">MS Office & Google Workspace</div>
         <div class="tool-row">Trello & Project Workflows</div>
         <div class="tool-row">Basic HTML / JavaScript (high school)</div>
-        <div class="tool-row">3D Printing (Certified)</div>
+        <div class="tool-row">3D Printing (Certified Operator)</div>
       </div>
     </div>
   </div>
@@ -719,13 +871,13 @@ nav.scrolled {
   <div class="section-label">Education</div>
   <div class="edu-grid" id="edu-grid">
     <div class="edu-card">
-      <div class="edu-yr">2024 - 2027 · Ongoing</div>
+      <div class="edu-yr">2024 — 2027 · Ongoing</div>
       <div class="edu-school">University of Gdańsk</div>
       <div class="edu-deg">BSc Management</div>
-      <div class="edu-note">2nd year. Organizational strategy, finance, project management. Participated in the "Strateg" Science Club - including running cybersecurity workshops for seniors focused on deepfakes and online scams.</div>
+      <div class="edu-note">2nd year. Organizational strategy, finance, project management. Participated in the "Strateg" Science Club — including running cybersecurity workshops for seniors focused on deepfakes and online scams.</div>
     </div>
     <div class="edu-card">
-      <div class="edu-yr">2019 - 2024</div>
+      <div class="edu-yr">2019 — 2024</div>
       <div class="edu-school">Technikum nr 13, Gdańsk</div>
       <div class="edu-deg">IT Technician Diploma</div>
       <div class="edu-note">Hardware architecture, networking, operating systems, basic programming. Five years of thinking technically before pivoting to management.</div>
@@ -761,7 +913,7 @@ nav.scrolled {
     <div class="hobby-card">
       <span class="hobby-icon">🎮</span>
       <div class="hobby-name">Gaming & Game Dev</div>
-      <div class="hobby-desc">I play a lot and I like understanding why games feel the way they do - what decisions went into making something fun or frustrating. That curiosity pushed me toward trying to build things myself, which is a whole different kind of challenge.</div>
+      <div class="hobby-desc">I play a lot and I like understanding why games feel the way they do — what decisions went into making something fun or frustrating. That curiosity pushed me toward trying to build things myself, which is a whole different kind of challenge.</div>
     </div>
     <div class="hobby-card">
       <span class="hobby-icon">🤖</span>
@@ -771,7 +923,7 @@ nav.scrolled {
     <div class="hobby-card">
       <span class="hobby-icon">💪</span>
       <div class="hobby-name">Gym</div>
-      <div class="hobby-desc">Been training for about a year and a half. Still relatively new to it but consistent. It's one of those things where the feedback is immediate and honest - either you showed up or you didn't.</div>
+      <div class="hobby-desc">Been training for about a year and a half. Still relatively new to it but consistent. It's one of those things where the feedback is immediate and honest — either you showed up or you didn't.</div>
     </div>
     <div class="hobby-card">
       <span class="hobby-icon">📈</span>
@@ -781,7 +933,7 @@ nav.scrolled {
     <div class="hobby-card">
       <span class="hobby-icon">📖</span>
       <div class="hobby-name">Reading</div>
-      <div class="hobby-desc">Mostly philosophy and fiction. I like reading things that make me think differently about how people make decisions or deal with uncertainty. Also a big fan of deep fictional universes - the kind where someone clearly spent years building the world.</div>
+      <div class="hobby-desc">Mostly philosophy and fiction. I like reading things that make me think differently about how people make decisions or deal with uncertainty. Also a big fan of deep fictional universes — the kind where someone clearly spent years building the world.</div>
     </div>
   </div>
 </section>
@@ -804,8 +956,32 @@ nav.scrolled {
 </section>
 
 <div class="footer">
-  <span class="footer-l">Krzysztof Gdaniec · 2026</span>
+  <span class="footer-l" id="footer-name">Krzysztof Gdaniec · 2026</span>
+  <div id="back-top-wrap">
+    <div id="back-top-label">back to top</div>
+    <button id="back-top" aria-label="Back to top">↑</button>
+  </div>
   <span class="footer-r">Gdańsk · Poland</span>
+</div>
+
+<!-- RASPBERRY — drag to dragon in education section -->
+<div id="raspberry">
+  <svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+    <line x1="11" y1="3" x2="11" y2="0.5" stroke="rgba(108,79,255,0.5)" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="11" y1="1.5" x2="9" y2="0" stroke="rgba(108,79,255,0.4)" stroke-width="0.8" stroke-linecap="round"/>
+    <circle cx="11" cy="5"  r="2.8" fill="rgba(108,79,255,0.25)" stroke="rgba(108,79,255,0.5)" stroke-width="0.5"/>
+    <circle cx="7"  cy="7"  r="2.8" fill="rgba(108,79,255,0.2)"  stroke="rgba(108,79,255,0.4)" stroke-width="0.5"/>
+    <circle cx="15" cy="7"  r="2.8" fill="rgba(108,79,255,0.25)" stroke="rgba(108,79,255,0.5)" stroke-width="0.5"/>
+    <circle cx="5"  cy="11" r="2.8" fill="rgba(108,79,255,0.2)"  stroke="rgba(108,79,255,0.4)" stroke-width="0.5"/>
+    <circle cx="11" cy="10" r="2.8" fill="rgba(108,79,255,0.25)" stroke="rgba(108,79,255,0.5)" stroke-width="0.5"/>
+    <circle cx="17" cy="11" r="2.8" fill="rgba(108,79,255,0.2)"  stroke="rgba(108,79,255,0.4)" stroke-width="0.5"/>
+    <circle cx="7"  cy="15" r="2.8" fill="rgba(108,79,255,0.25)" stroke="rgba(108,79,255,0.5)" stroke-width="0.5"/>
+    <circle cx="15" cy="15" r="2.8" fill="rgba(108,79,255,0.2)"  stroke="rgba(108,79,255,0.4)" stroke-width="0.5"/>
+    <circle cx="11" cy="18" r="2.8" fill="rgba(108,79,255,0.25)" stroke="rgba(108,79,255,0.5)" stroke-width="0.5"/>
+    <circle cx="10" cy="4"  r=".7" fill="rgba(255,255,255,0.15)"/>
+    <circle cx="6"  cy="6"  r=".7" fill="rgba(255,255,255,0.1)"/>
+    <circle cx="14" cy="6"  r=".7" fill="rgba(255,255,255,0.1)"/>
+  </svg>
 </div>
 
 <script>
@@ -991,6 +1167,316 @@ document.addEventListener('mousemove', e=>{
     d.style.top=positions[i].y+'px';
   });
   requestAnimationFrame(animate);
+})();
+
+// SCROLL SPY
+(function(){
+  const links = document.querySelectorAll('.nav-links a');
+  const sections = Array.from(links).map(a => document.querySelector(a.getAttribute('href')));
+  window.addEventListener('scroll', () => {
+    const mid = window.scrollY + window.innerHeight * 0.4;
+    let active = null;
+    sections.forEach((s, i) => {
+      if(s && s.offsetTop <= mid) active = i;
+    });
+    links.forEach((a, i) => a.classList.toggle('active', i === active));
+  }, { passive: true });
+})();
+
+// BACK TO TOP — pojawia się przy 90% strony
+(function(){
+  const wrap = document.getElementById('back-top-wrap');
+  const btn  = document.getElementById('back-top');
+  if(!wrap || !btn) return;
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    wrap.classList.toggle('visible', scrolled > 0.90);
+  }, { passive: true });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+})();
+
+// MINECRAFT DIRT BLOCK — spada bardzo rzadko, pierwsze po ~30s
+(function(){
+  const INTERVAL_MIN = 45000;
+  const INTERVAL_MAX = 90000;
+
+  function makeDirt() {
+    const SIZE = 48;
+    const el = document.createElement('div');
+    el.style.cssText = `
+      position:fixed;
+      top:-${SIZE+8}px;
+      left:${6 + Math.random()*88}vw;
+      width:${SIZE}px;height:${SIZE}px;
+      z-index:1;
+      pointer-events:none;
+      image-rendering:pixelated;
+      opacity:0.6;
+    `;
+
+    // 16×16 pixel-art dirt block (właściwy kwadrat)
+    // każdy piksel to 1 jednostka w SVG viewBox 16×16
+    const c = [
+      // row 0-1: trawa
+      '4a8c28','52982c','4a8c28','5aa030','4a8c28','52982c','5aa030','4a8c28','52982c','4a8c28','5aa030','4a8c28','52982c','4a8c28','4a8c28','52982c',
+      '5aa030','4a8c28','52982c','4a8c28','5aa030','4a8c28','4a8c28','52982c','4a8c28','5aa030','4a8c28','52982c','5aa030','4a8c28','52982c','4a8c28',
+      // row 2-3: przejście grass→dirt
+      '6ab040','5aa030','6ab040','5aa030','6ab040','5aa030','6ab040','5aa030','6ab040','5aa030','6ab040','5aa030','6ab040','5aa030','6ab040','5aa030',
+      '7a5c3a','8b6540','7a5c3a','8b6540','7a5c3a','8b6540','7a5c3a','8b6540','7a5c3a','8b6540','7a5c3a','8b6540','7a5c3a','8b6540','7a5c3a','8b6540',
+      // row 4-15: dirt
+      '8b6540','9b7550','7a5c3a','8b6540','a08060','7a5c3a','9b7550','8b6540','7a5c3a','8b6540','9b7550','7a5c3a','8b6540','a08060','7a5c3a','9b7550',
+      '7a5c3a','8b6540','9b7550','7a5c3a','8b6540','a08060','7a5c3a','9b7550','9b7550','7a5c3a','8b6540','9b7550','7a5c3a','8b6540','a08060','7a5c3a',
+      '9b7550','7a5c3a','8b6540','a08060','7a5c3a','9b7550','8b6540','7a5c3a','8b6540','a08060','7a5c3a','8b6540','9b7550','7a5c3a','a08060','8b6540',
+      '8b6540','9b7550','7a5c3a','8b6540','a08060','7a5c3a','9b7550','8b6540','7a5c3a','8b6540','9b7550','a08060','7a5c3a','8b6540','9b7550','7a5c3a',
+      '7a5c3a','8b6540','9b7550','7a5c3a','8b6540','9b7550','7a5c3a','a08060','9b7550','7a5c3a','8b6540','9b7550','7a5c3a','8b6540','a08060','7a5c3a',
+      'a08060','7a5c3a','8b6540','9b7550','7a5c3a','8b6540','a08060','8b6540','8b6540','a08060','7a5c3a','8b6540','9b7550','7a5c3a','8b6540','a08060',
+      '8b6540','9b7550','7a5c3a','8b6540','9b7550','7a5c3a','8b6540','a08060','7a5c3a','8b6540','9b7550','7a5c3a','a08060','8b6540','7a5c3a','9b7550',
+      '7a5c3a','8b6540','a08060','7a5c3a','8b6540','9b7550','7a5c3a','8b6540','9b7550','7a5c3a','8b6540','a08060','7a5c3a','9b7550','8b6540','7a5c3a',
+      // row 15: cień na dole
+      '6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c','6b4a2c',
+    ];
+
+    const rects = c.map((col, i) => {
+      const x = i % 16, y = Math.floor(i / 16);
+      return `<rect x="${x}" y="${y}" width="1" height="1" fill="#${col}"/>`;
+    }).join('');
+
+    el.innerHTML = `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" width="${SIZE}" height="${SIZE}"
+      style="filter:drop-shadow(1px 3px 5px rgba(0,0,0,0.7))">${rects}</svg>`;
+
+    document.body.appendChild(el);
+
+    const duration = 2400 + Math.random() * 1200;
+    const rotation = (Math.random() > 0.5 ? 1 : -1) * (10 + Math.random() * 20);
+    let start = null;
+
+    function fall(ts) {
+      if(!start) start = ts;
+      const p = Math.min((ts - start) / duration, 1);
+      const ease = p < 0.5 ? 2*p*p : -1+(4-2*p)*p;
+      const y = ease * (window.innerHeight + SIZE + 20);
+      const rot = ease * rotation;
+      el.style.transform = `translateY(${y}px) rotate(${rot}deg)`;
+      if(p < 1) requestAnimationFrame(fall);
+      else el.remove();
+    }
+    requestAnimationFrame(fall);
+  }
+
+  function schedule() {
+    const delay = INTERVAL_MIN + Math.random() * (INTERVAL_MAX - INTERVAL_MIN);
+    setTimeout(() => { makeDirt(); schedule(); }, delay);
+  }
+
+  // pierwsze pojawienie po ~30s od załadowania strony
+  setTimeout(() => { makeDirt(); schedule(); }, 28000 + Math.random() * 5000);
+})();
+
+
+// RASPBERRY — drag to dragon
+(function(){
+  const rasp   = document.getElementById('raspberry');
+  const dragon = document.getElementById('dragon-float');
+  if(!rasp || !dragon) return;
+
+  let dragging = false, ox = 0, oy = 0;
+  let startLeft, startTop;
+
+  rasp.addEventListener('mousedown', e => {
+    dragging = true;
+    rasp.classList.add('dragging');
+    const rr = rasp.getBoundingClientRect();
+    ox = e.clientX - rr.left;
+    oy = e.clientY - rr.top;
+    startLeft = rr.left;
+    startTop  = rr.top;
+    rasp.style.position = 'fixed';
+    rasp.style.left = rr.left + 'px';
+    rasp.style.top  = rr.top  + 'px';
+    rasp.style.transform = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if(!dragging) return;
+    rasp.style.left = (e.clientX - ox) + 'px';
+    rasp.style.top  = (e.clientY - oy) + 'px';
+  });
+
+  document.addEventListener('mouseup', () => {
+    if(!dragging) return;
+    dragging = false;
+    rasp.classList.remove('dragging');
+
+    const dr = dragon.getBoundingClientRect();
+    const rr = rasp.getBoundingClientRect();
+    const dist = Math.hypot(
+      (rr.left + rr.width/2)  - (dr.left + dr.width/2),
+      (rr.top  + rr.height/2) - (dr.top  + 30)
+    );
+
+    if(dist < 80) {
+      rasp.classList.add('fed');
+      dragon.classList.add('spin');
+      setTimeout(() => dragon.classList.remove('spin'), 700);
+      setTimeout(() => rasp.remove(), 420);
+    } else {
+      // snap back to original fixed position
+      rasp.style.position = 'fixed';
+      rasp.style.left = startLeft + 'px';
+      rasp.style.top  = startTop  + 'px';
+      rasp.style.transition = 'left .4s ease, top .4s ease';
+      const footer = document.querySelector('.footer');
+      const fr = footer.getBoundingClientRect();
+      rasp.style.left = (fr.left + fr.width/2 + 120 - 13) + 'px';
+      rasp.style.top  = (fr.top  + fr.height/2 - 13) + 'px';
+      setTimeout(() => {
+        rasp.style.transition = '';
+        rasp.style.position = 'fixed';
+        rasp.style.left = '';
+        rasp.style.top  = '';
+        rasp.style.transform = '';
+      }, 420);
+    }
+  });
+})();
+
+// EASTER EGG — click name in footer 4 times → 🌟67🌟
+(function(){
+  const name = document.getElementById('footer-name');
+  if(!name) return;
+  const popup = document.createElement('div');
+  popup.id = 'egg-popup';
+  document.body.appendChild(popup);
+
+  let clicks = 0, timer;
+
+  name.addEventListener('click', () => {
+    clicks++;
+    clearTimeout(timer);
+
+    if(clicks <= 4) {
+      popup.textContent = '...';
+    } else {
+      popup.textContent = '🌟67🌟';
+      clicks = 0;
+    }
+
+    popup.classList.add('show');
+    timer = setTimeout(() => popup.classList.remove('show'), clicks === 0 ? 3500 : 1600);
+  });
+})();
+
+// TYPEWRITER
+(function(){
+  const el = document.getElementById('hero-desc-tw');
+  if(!el) return;
+  const text = "Management student with a strong IT foundation. Passionate about emerging technologies, automation, and continuous learning. Bridging the gap between technical understanding and effective project execution.";
+  const cur = document.createElement('span');
+  cur.id = 'tw-cursor';
+  let i = 0;
+  setTimeout(function type(){
+    el.textContent = text.slice(0, ++i);
+    el.appendChild(cur);
+    if(i < text.length) setTimeout(type, 26 + Math.random()*16);
+    else setTimeout(() => cur.remove(), 2800);
+  }, 2500);
+})();
+
+// SCROLL PARTICLES
+(function(){
+  const COLORS = ['rgba(108,79,255,0.9)','rgba(140,110,255,0.8)','rgba(80,50,220,0.7)','rgba(180,160,255,0.6)'];
+
+  function spawnParticles(entry) {
+    const rect = entry.boundingClientRect;
+    const count = 18 + Math.floor(Math.random() * 12);
+    for(let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      const size = 2 + Math.random() * 3.5;
+      const startX = rect.left + Math.random() * rect.width;
+      const startY = rect.top + window.scrollY;
+      const angle = -Math.PI/2 + (Math.random() - 0.5) * Math.PI * 1.2;
+      const speed = 60 + Math.random() * 120;
+      const vx = Math.cos(angle) * speed;
+      const vy = Math.sin(angle) * speed;
+      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      const life = 600 + Math.random() * 600;
+
+      p.style.cssText = `
+        position:absolute;
+        left:${startX}px;
+        top:${startY}px;
+        width:${size}px;height:${size}px;
+        border-radius:50%;
+        background:${color};
+        pointer-events:none;
+        z-index:9997;
+        box-shadow:0 0 ${size*2}px ${color};
+      `;
+      document.body.appendChild(p);
+
+      let start = null;
+      (function animate(ts) {
+        if(!start) start = ts;
+        const t = (ts - start) / life;
+        if(t >= 1) { p.remove(); return; }
+        const ease = 1 - t;
+        const gravity = 40 * t * t;
+        p.style.transform = `translate(${vx*t}px, ${vy*t + gravity}px)`;
+        p.style.opacity = ease * ease;
+        requestAnimationFrame(animate);
+      })();
+    }
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        spawnParticles(entry);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.section').forEach(s => observer.observe(s));
+})();
+
+// CHIP 3D TILT
+(function(){
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('mousemove', e => {
+      const r = chip.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width  - 0.5;
+      const y = (e.clientY - r.top)  / r.height - 0.5;
+      chip.style.transform = `perspective(300px) rotateY(${x*22}deg) rotateX(${-y*22}deg) translateY(-5px) scale(1.08)`;
+    });
+    chip.addEventListener('mouseleave', () => {
+      chip.style.transition = 'transform .35s ease, box-shadow .15s ease, border-color .15s, color .15s';
+      chip.style.transform = 'perspective(300px) rotateY(0) rotateX(0) translateY(0) scale(1)';
+      setTimeout(() => { chip.style.transition = 'box-shadow .15s ease, border-color .15s, color .15s'; }, 350);
+    });
+    chip.addEventListener('mouseenter', () => {
+      chip.style.transition = 'box-shadow .15s ease, border-color .15s, color .15s';
+    });
+  });
+})();
+
+// TILT 3D
+(function(){
+  const card = document.querySelector('.hero-card');
+  if(!card) return;
+  const MAX = 12;
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - 0.5;
+    const y = (e.clientY - r.top)  / r.height - 0.5;
+    card.style.transition = 'transform .08s ease, box-shadow .3s';
+    card.style.transform  = `perspective(700px) rotateY(${x*MAX}deg) rotateX(${-y*MAX}deg) scale(1.03)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transition = 'transform .5s ease, box-shadow .3s';
+    card.style.transform  = 'perspective(700px) rotateY(0) rotateX(0) scale(1)';
+  });
 })();
 </script>
 </html>
